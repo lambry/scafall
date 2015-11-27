@@ -3,7 +3,7 @@
  *
  * JavaScript for the settings pages.
  */
-
+ 
 (function( $ ) {
 
 	var Settings = {

@@ -2,13 +2,16 @@
 /**
  * Settings
  *
- * Create new settings page in WordPress admin.
+ * Create new settings page.
  *
  * @package Lambry
  */
 
-namespace Lambry;
+namespace Lambry\Kickoff;
 
+defined( 'ABSPATH' ) || exit;
+
+/* Settings Class */
 class Settings {
 
 	/* Variables */
