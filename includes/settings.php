@@ -4,7 +4,7 @@
  *
  * Create new settings page.
  *
- * @package Lambry
+ * @package Kickoff
  */
 
 namespace Lambry\Kickoff;
@@ -105,11 +105,11 @@ class Settings {
 		if ( $this->page !== $hook ) return;
 
 		// Load settings css
-		wp_enqueue_style( 'lambry-settings-style', plugin_dir_url( __FILE__ ) . 'assets/styles/settings.css', [ 'wp-color-picker' ], '0.1.0' );
+		wp_enqueue_style( 'kickoff-settings-style', plugin_dir_url( __FILE__ ) . 'assets/styles/settings.css', [ 'wp-color-picker' ], '0.1.0' );
 		// Load media assets
 		wp_enqueue_media();
 		// Load settings js
-		wp_enqueue_script( 'lambry-settings-scripts', plugin_dir_url( __FILE__ ) . 'assets/scripts/settings.js', [ 'jquery','wp-color-picker' ], '0.1.0', true );
+		wp_enqueue_script( 'kickoff-settings-scripts', plugin_dir_url( __FILE__ ) . 'assets/scripts/settings.js', [ 'jquery','wp-color-picker' ], '0.1.0', true );
 
 	}
 
@@ -159,7 +159,7 @@ class Settings {
 	 */
 	public function register_page() { ?>
 
-		<div id="<?php echo $this->title_clean; ?>" class="wrap lambry-settings">
+		<div id="<?php echo $this->title_clean; ?>" class="wrap kickoff-settings">
 			<h2><?php echo $this->title; ?></h2>
 			<?php settings_errors(); ?>
 
@@ -330,7 +330,7 @@ class Settings {
 	private function select( $field ) { ?>
 
 		<select name="<?php echo $this->field_name( $field ); ?>">
-			<option value=""><?php echo __( '-- select --', 'lambry' ); ?></option>
+			<option value=""><?php echo __( '-- select --', 'kickoff' ); ?></option>
 			<?php foreach ( $field['choices'] as $value => $label ) : ?>
 				<option value="<?php echo $value; ?>" <?php selected( $this->field_value( $field ), $value ); ?>><?php echo $label; ?></option>
 			<?php endforeach; ?>
@@ -427,7 +427,7 @@ class Settings {
 			</div>
 
 			<input type="hidden" name="<?php echo $this->field_name( $field ); ?>" value="<?php echo $option; ?>" class="upload-file">
-			<button class="button upload-select" type="button"><?php _e( 'Select', 'lambry' ); ?></button>
+			<button class="button upload-select" type="button"><?php _e( 'Select', 'kickoff' ); ?></button>
 
 			<?php $this->field_description( $field ); ?>
 		</div>
@@ -543,7 +543,7 @@ class Settings {
 	 */
 	public static function setting_name( $name, $id ) {
 
-		return 'lambry-' . $name . '-' . $id;
+		return 'kickoff-' . $name . '-' . $id;
 
 	}
 

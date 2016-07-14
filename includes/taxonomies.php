@@ -4,7 +4,7 @@
  *
  * Create new taxonomies.
  *
- * @package Lambry
+ * @package Kickoff
  */
 
 namespace Lambry\Kickoff;

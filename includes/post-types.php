@@ -4,7 +4,7 @@
  *
  * Create new post types.
  *
- * @package Lambry
+ * @package Kickoff
  */
 
 namespace Lambry\Kickoff;

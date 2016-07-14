@@ -1,0 +1,90 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: kickoff\n"
+"POT-Creation-Date: 2016-07-14 19:31+1200\n"
+"PO-Revision-Date: 2015-03-10 21:05+1000\n"
+"Last-Translator: David Featherston <david@lambry.com>\n"
+"Language-Team: \n"
+"Language: en_AU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.8\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: examples.php:20
+msgid "Basic"
+msgstr ""
+
+#: examples.php:21
+msgid "The basic field options."
+msgstr ""
+
+#: examples.php:25
+msgid "Text"
+msgstr ""
+
+#: examples.php:26
+msgid "A sample description."
+msgstr ""
+
+#: examples.php:30 includes/settings.php:430
+msgid "Select"
+msgstr ""
+
+#: examples.php:39
+msgid "Radio"
+msgstr ""
+
+#: examples.php:48
+msgid "Checkbox"
+msgstr ""
+
+#: examples.php:57
+msgid "Textarea"
+msgstr ""
+
+#: examples.php:61
+msgid "Editor"
+msgstr ""
+
+#: examples.php:67
+msgid "Extra"
+msgstr ""
+
+#: examples.php:68
+msgid "Some more feild options."
+msgstr ""
+
+#: examples.php:72
+msgid "On Off"
+msgstr ""
+
+#: examples.php:76
+msgid "Upload"
+msgstr ""
+
+#: examples.php:80
+msgid "Color"
+msgstr ""
+
+#: examples.php:84
+msgid "Block"
+msgstr ""
+
+#: examples.php:85
+msgid "The block field is for display text only."
+msgstr ""
+
+#: examples.php:91
+msgid "Kickoff"
+msgstr ""
+
+#: includes/settings.php:333
+msgid "-- select --"
+msgstr ""

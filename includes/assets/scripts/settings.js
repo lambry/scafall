@@ -3,12 +3,12 @@
  *
  * JavaScript for the settings pages.
  */
- 
+
 (function( $ ) {
 
 	var Settings = {
 		init : function() {
-			var wrapper = $( '.lambry-settings' );
+			var wrapper = $( '.kickoff-settings' );
 			// Handle upload
 			wrapper.on( 'click', '.upload-select', this.selectUpload );
 			// Handle removing upload

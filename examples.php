@@ -4,7 +4,7 @@
  *
  * Examples on adding settings, post types, taxonomies and user roles.
  *
- * @package Lambry
+ * @package Kickoff
  */
 
 namespace Lambry\Kickoff;
@@ -17,17 +17,17 @@ defined( 'ABSPATH' ) || exit;
 $settings = [
 	[
 		'id'    => 'basic',
-		'title' => __( 'Basic', 'lambry' ),
-		'description' => __( 'The basic field options.', 'lambry' ),
+		'title' => __( 'Basic', 'kickoff' ),
+		'description' => __( 'The basic field options.', 'kickoff' ),
 		'fields' => [
 			[
 				'id'    => 'text',
-				'label' => __( 'Text', 'lambry' ),
-				'description' => __( 'A sample description.', 'lambry' ),
+				'label' => __( 'Text', 'kickoff' ),
+				'description' => __( 'A sample description.', 'kickoff' ),
 				'type'  => 'text'
 			], [
 				'id'    => 'select',
-				'label' => __( 'Select', 'lambry' ),
+				'label' => __( 'Select', 'kickoff' ),
 				'type'  => 'select',
 				'choices' => [
 					'one' => 'One',
@@ -36,7 +36,7 @@ $settings = [
 				]
 			], [
 				'id'    => 'radio',
-				'label' => __( 'Radio', 'lambry' ),
+				'label' => __( 'Radio', 'kickoff' ),
 				'type'  => 'radio',
 				'choices' => [
 					'one' => 'One',
@@ -45,7 +45,7 @@ $settings = [
 				]
 			], [
 				'id'    => 'checkbox',
-				'label' => __( 'Checkbox', 'lambry' ),
+				'label' => __( 'Checkbox', 'kickoff' ),
 				'type'  => 'checkbox',
 				'choices' => [
 					'one' => 'One',
@@ -54,47 +54,47 @@ $settings = [
 				]
 			], [
 				'id'    => 'textarea',
-				'label' => __( 'Textarea', 'lambry' ),
+				'label' => __( 'Textarea', 'kickoff' ),
 				'type'  => 'textarea'
 			], [
 				'id'    => 'editor',
-				'label' => __( 'Editor', 'lambry' ),
+				'label' => __( 'Editor', 'kickoff' ),
 				'type'  => 'editor'
 			]
 		]
 	], [
 		'id'          => 'extra',
-		'title'       => __( 'Extra', 'lambry' ),
-		'description' => __( 'Some more feild options.', 'lambry' ),
+		'title'       => __( 'Extra', 'kickoff' ),
+		'description' => __( 'Some more feild options.', 'kickoff' ),
 		'fields'      => [
 			[
 				'id'    => 'on_off',
-				'label' => __( 'On Off', 'lambry' ),
+				'label' => __( 'On Off', 'kickoff' ),
 				'type'  => 'on_off'
 			], [
 				'id'    => 'upload',
-				'label' => __( 'Upload', 'lambry' ),
+				'label' => __( 'Upload', 'kickoff' ),
 				'type'  => 'upload'
 			], [
 				'id'    => 'color',
-				'label' => __( 'Color', 'lambry' ),
+				'label' => __( 'Color', 'kickoff' ),
 				'type'  => 'color'
 			], [
 				'id'    => 'block',
-				'label' => __( 'Block', 'lambry' ),
-				'content' => __( 'The block field is for display text only.', 'lambry' ),
+				'label' => __( 'Block', 'kickoff' ),
+				'content' => __( 'The block field is for display text only.', 'kickoff' ),
 				'type'  => 'block'
 			]
 		]
 	]
 ];
-new Settings( 'option', $settings, __( 'Kickoff', 'lambry' ) );
+new Settings( 'option', $settings, __( 'Kickoff', 'kickoff' ) );
 
 /*
  * Register post types
  */
 $types = [
-    [ 
+    [
     	'name'    => 'Book',
     	'plural'  => 'Books',
     	'options' => [
@@ -111,9 +111,9 @@ new Post_Types( $types );
  * Register taxonomies
  */
 $taxonomies = [
-    [ 
-    	'name'       => 'Genre', 
-    	'plural'     => 'Genres', 
+    [
+    	'name'       => 'Genre',
+    	'plural'     => 'Genres',
     	'post_types' => [ 'Book' ],
     	'options'    => [
             'hierarchical'      => true,
@@ -131,7 +131,7 @@ new Taxonomies( $taxonomies );
  * Register user roles
  */
 $roles = [
-    [ 
+    [
         'name' => 'Acquaintance',
         'capabilities' => [
             'read'                   => true,
@@ -142,6 +142,6 @@ $roles = [
             'delete_published_posts' => false,
             'upload_files'           => false
         ]
-    ]        
+    ]
 ];
 new User_Roles( $roles );

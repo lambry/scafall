@@ -4,7 +4,7 @@
  *
  * Create new user roles.
  *
- * @package Lambry
+ * @package Kickoff
  */
 
 namespace Lambry\Kickoff;
