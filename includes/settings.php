@@ -105,11 +105,11 @@ class Settings {
 		if ( $this->page !== $hook ) return;
 
 		// Load settings css
-		wp_enqueue_style( 'kickoff-settings-style', plugin_dir_url( __FILE__ ) . 'assets/styles/settings.css', [ 'wp-color-picker' ], '0.1.0' );
+		wp_enqueue_style( 'kickoff-settings-style', KICKOFF_PATH . 'assets/styles/settings.css', [ 'wp-color-picker' ], '0.1.0' );
 		// Load media assets
 		wp_enqueue_media();
 		// Load settings js
-		wp_enqueue_script( 'kickoff-settings-scripts', plugin_dir_url( __FILE__ ) . 'assets/scripts/settings.js', [ 'jquery','wp-color-picker' ], '0.1.0', true );
+		wp_enqueue_script( 'kickoff-settings-scripts', KICKOFF_PATH . 'assets/scripts/settings.js', [ 'jquery','wp-color-picker' ], '0.1.0', true );
 
 	}
 
@@ -126,7 +126,7 @@ class Settings {
 		// Set up each setting section
 		foreach ( $this->settings as $section ) {
 
-			$setting_id = $this->setting_name( $this->title_clean, $section['id'] );
+			$setting_id = $this->setting_name( $section['id'] );
 
 			// Create option
 			if ( ! get_option( $setting_id ) ) {
@@ -176,7 +176,7 @@ class Settings {
 				<?php
 					foreach ( $this->settings as $section ) {
 						if ( $section['id'] === $this->current_tab() ) {
-							$setting_name = $this->setting_name( $this->title_clean, $section['id'] );
+							$setting_name = $this->setting_name( $section['id'] );
 							settings_fields( $setting_name );
 							do_settings_sections( $setting_name );
 							submit_button();
@@ -373,7 +373,7 @@ class Settings {
 	 */
 	private function checkbox( $field ) {
 
-		$option = $this->field_value( $field ); ?>
+		$option = $this->field_value( $field, [] ); ?>
 
 		<?php $i = 1;
 		foreach ( $field['choices'] as $value => $label ) :
@@ -507,13 +507,14 @@ class Settings {
 	 *
 	 * @access private
 	 * @param array $field
+	 * @param mixed $default
 	 * @return string $option
 	 */
-	private function field_value( $field ) {
+	private function field_value( $field, $default = '' ) {
 
 		$options = get_option( $field['section'] );
 
-		return ( isset( $options[$field['id']] ) ) ? $options[$field['id']] : '';
+		return ( isset( $options[$field['id']] ) ) ? $options[$field['id']] : $default;
 
 	}
 
@@ -537,46 +538,44 @@ class Settings {
 	 * Generates a settings name.
 	 *
 	 * @access public
-	 * @param  string $name
 	 * @param  string $id
 	 * @return string $name
 	 */
-	public static function setting_name( $name, $id ) {
+	public static function setting_name( $id ) {
 
-		return 'kickoff-' . $name . '-' . $id;
-
-	}
-
-	/**
-	 * Get Settings
-	 *
-	 * Gets the all settings within a section.
-	 *
-	 * @access public
-	 * @param  string $name
-	 * @param  string $id
-	 * @return array $settings
-	 */
-	public static function get_settings( $name, $id ) {
-
-		return get_option( self::setting_name( $name, $id ), [] );
+		return 'kickoff-' . $id;
 
 	}
 
 	/**
-	 * Get Setting
+	 * Show
 	 *
-	 * Gets a setting value.
+	 * Gets and display a setting.
 	 *
 	 * @access public
-	 * @param  string $name
 	 * @param  string $id
 	 * @param  string $field
 	 * @return string $setting
 	 */
-	public static function get_setting( $name, $id, $field ) {
+	public static function show( $id, $field ) {
 
-		$setting = get_option( self::setting_name( $name, $id ), '' );
+		echo self::get( $id, $field );
+
+	}
+
+	/**
+	 * Get
+	 *
+	 * Gets a setting value.
+	 *
+	 * @access public
+	 * @param  string $id
+	 * @param  string $field
+	 * @return string $setting
+	 */
+	public static function get( $id, $field ) {
+
+		$setting = get_option( self::setting_name( $id ), '' );
 		if ( $setting && isset( $setting[$field] ) ) {
 			$setting = $setting[$field];
 		}
@@ -585,4 +584,18 @@ class Settings {
 
 	}
 
+	/**
+	 * All
+	 *
+	 * Gets the all settings within a section.
+	 *
+	 * @access public
+	 * @param  string $id
+	 * @return array $settings
+	 */
+	public static function all( $id ) {
+
+		return get_option( self::setting_name( $id ), [] );
+
+	}
 }

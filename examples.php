@@ -2,7 +2,7 @@
 /**
  * Examples
  *
- * Examples on adding settings, post types, taxonomies and user roles.
+ * Examples on adding settings, post types, taxonomies, user roles and meta boexs.
  *
  * @package Kickoff
  */
@@ -114,7 +114,7 @@ $taxonomies = [
     [
     	'name'       => 'Genre',
     	'plural'     => 'Genres',
-    	'post_types' => [ 'Book' ],
+    	'post_types' => 'Book',
     	'options'    => [
             'hierarchical'      => true,
             'public'            => true,
@@ -145,3 +145,99 @@ $roles = [
     ]
 ];
 new User_Roles( $roles );
+
+/*
+ * Register Meta Boxes
+ */
+$meta_boxes = [
+	[
+		'id'          => 'basic_section',
+		'title'       => __( 'Basic Section', 'kickoff' ),
+		'description' => __( 'An example of all the basic fields.', 'kickoff' ),
+		'fields'      => [
+			[
+				'id'    => 'select',
+				'label' => __( 'Select', 'kickoff' ),
+				'description' => __( 'Select field.', 'kickoff' ),
+				'type'  => 'select',
+				'choices' => [
+					'selectone'   => 'Select One',
+					'selecttwo'   => 'Select Two',
+					'selectthree' => 'Select Three'
+				]
+			], [
+				'id'    => 'radio',
+				'label' => __( 'Radio', 'kickoff' ),
+				'description' => __( 'Radio Buttons.', 'kickoff' ),
+				'type'  => 'radio',
+				'choices' => [
+					'radioone'   => 'Radio One',
+					'radiotwo'   => 'Radio Two',
+					'radiothree' => 'Radio Three'
+				]
+			], [
+				'id'    => 'checkbox',
+				'label' => __( 'Checkboxes', 'kickoff' ),
+				'description' => __( 'Checkboxes.', 'kickoff' ),
+				'type'  => 'checkbox',
+				'choices' => [
+					'checkone'   => 'Check One',
+					'checktwo'   => 'Check Two',
+					'checkthree' => 'Check Three'
+				]
+			], [
+				'id'    => 'upload',
+				'label' => __( 'Upload', 'kickoff' ),
+				'description' => __( 'Upload field.', 'kickoff' ),
+				'type'  => 'upload'
+			], [
+				'id'    => 'on_off',
+				'label' => __( 'On Off', 'kickoff' ),
+				'description' => __( 'On or off checkbox.', 'kickoff' ),
+				'type'  => 'on_off'
+			], [
+				'id'    => 'color',
+				'label' => __( 'Color', 'kickoff' ),
+				'description' => __( 'A color picker.', 'kickoff' ),
+				'type'  => 'color'
+			], [
+				'id'    => 'textarea',
+				'label' => __( 'Textarea', 'kickoff' ),
+				'description' => __( 'Textarea.', 'kickoff' ),
+				'type'  => 'textarea'
+			], [
+				'id'    => 'editor',
+				'label' => __( 'Editor', 'kickoff' ),
+				'description' => __( 'Editor/Wysiwyg.', 'kickoff' ),
+				'type'  => 'editor'
+			]
+		]
+	], [
+		'id'          => 'repeater_section',
+		'title'       => __('Repeater Section', 'kickoff'),
+		'description' => __( 'An example using the repeater field.', 'kickoff' ),
+		'fields'      => [
+			[
+				'id'     => 'repeater',
+				'label'  => __('Repeater', 'kickoff'),
+				'type'   => 'repeater',
+				'fields' => [
+					[
+						'id'    => 'title',
+						'label' => __('Title', 'kickoff'),
+						'type'  => 'text'
+					], [
+						'id'    => 'image',
+						'label' => __('Image', 'kickoff'),
+						'type'  => 'upload'
+					], [
+						'id'    => 'content',
+						'label' => __('Content', 'kickoff'),
+						'type'  => 'textarea'
+					]
+				]
+			]
+		]
+	]
+];
+new Meta_Boxes( $meta_boxes );

@@ -53,7 +53,7 @@ class Taxonomies {
 
 			// Setup post types
 			$post_types = [];
-			foreach ( $taxonomy['post_types'] as $type ) {
+			foreach ( (array) $taxonomy['post_types'] as $type ) {
 				$post_types[] = sanitize_title_with_dashes( $type );
 			}
 

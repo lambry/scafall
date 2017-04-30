@@ -25,7 +25,10 @@ class Init {
      * Construct
      */
     public function __construct() {
+
         $this->includes();
+
+		define('KICKOFF_PATH', plugin_dir_url( __FILE__ ));
 
         // Load text domain
         load_plugin_textdomain( 'kickoff', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
@@ -33,6 +36,7 @@ class Init {
         // Add admin assets
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'public_assets' ] );
+
     }
 
     /*
@@ -42,11 +46,16 @@ class Init {
      * @return null
      */
     private function includes() {
+
+        require_once plugin_dir_path(__FILE__) . 'includes/meta-boxes/meta-boxes.php';
         require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
         require_once plugin_dir_path(__FILE__) . 'includes/post-types.php';
         require_once plugin_dir_path(__FILE__) . 'includes/taxonomies.php';
         require_once plugin_dir_path(__FILE__) . 'includes/user-roles.php';
+
+		// Temp examples - Remove me
         require_once plugin_dir_path(__FILE__) . 'examples.php';
+
     }
 
     /*
