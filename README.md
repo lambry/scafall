@@ -1,130 +1,63 @@
 # Kickoff
 
-A starter plugin of sorts; simplifies setting up post types, taxonomies, user roles, settings and meta boxes.
+A simple example/starter plugin with helpers for adding post types, taxonomies, roles and api endpoints.
 
-### Adding Post Types
+## Adding Post Types
 ```php
-use Lambry\Kickoff\Post_Types;
+use Lambry\Kickoff\PostType;
 
-$types = [
-    [
-    	'name'    => 'Book',
-    	'plural'  => 'Books',
-    	'options' => [ 'menu_icon'   => 'dashicons-book-alt' ]
-    ], [
-    	'name'    => 'Contact',
-    	'plural'  => 'Contacts',
-    	'options' => [ 'menu_icon'   => 'dashicons-groups' ]
-    ]
-];
-new Post_Types( $types );
+/**
+ * @param string post type id / slug
+ * @param string post type name single
+ * @param string post type name plural
+ */
+PostType::add('books', 'Book', 'Books')->set([
+	'menu_icon' => 'dashicons-book-alt'
+]);
 ```
 
-### Adding Taxonomies
+## Adding Taxonomies
 ```php
-use Lambry\Kickoff\Taxonomies;
+use Lambry\Kickoff\Taxonomy;
 
-$taxonomies = [
-    [
-    	'name'       => 'Genre',
-    	'plural'     => 'Genres',
-    	'post_types' => 'Book'
-    ], [
-    	'name'       => 'Region',
-    	'plural'     => 'Regions',
-    	'post_types' => 'Contact'
-    ]
-];
-new Taxonomies( $taxonomies );
+/**
+ * @param string taxomomy id / slug
+ * @param string taxonomy name single
+ * @param string taxonomy name plural
+ * @param string|array post types
+ */
+Taxonomy::add('genre', 'Genre', 'Genres', 'books')->set([
+	'hierarchical' => true,
+	'public'       => true
+]);
 ```
 
-### Adding User Roles
+## Adding User Roles
 ```php
-use Lambry\Kickoff\User_Roles;
+use Lambry\Kickoff\Role;
 
-$roles = [
-    [
-        'name' => 'Contractor',
-        'capabilities' => [
-            'read'                   => true,
-            'edit_posts'             => false
-        ]
-    ]
-];
-new User_Roles( $roles );
+/**
+ * @param string role id / slug
+ * @param string role name
+ */
+Role::add('customer', 'Customer')->set([
+	'publish_posts' => false,
+	'read'          => true
+]);
 ```
 
-### Adding Settings
+## Adding API endpoints
 ```php
-use Lambry\Kickoff\Settings;
+use Lambry\Kickoff\Router;
 
-$settings = [
-	[
-		'id'    => 'signup',
-		'title' => __( 'Signup Options', 'kickoff' ),
-		'description' => __( 'The basic signup settings.', 'kickoff' ),
-		'fields' => [
-			[
-				'id'    => 'title',
-				'label' => __( 'Signup Title', 'kickoff' ),
-				'description' => __( 'The signup forms title.', 'kickoff' ),
-				'type'  => 'text'
-			], [
-				'id'    => 'modal',
-				'label' => __( 'Show signup in modal.', 'kickoff' ),
-				'type'  => 'on_off'
-			]
-		]
-	]
-];
+$router = new Router('kickoff/v1');
 
-new Settings( 'option', $settings, __( 'Kickoff', 'kickoff' ) );
-```
-
-#### Using Settings
-```php
-use Lambry\Kickoff\Settings as Setting;
-
-// Get field
-Setting::get('signup', 'modal');
-// Get and echo field
-Setting::show('signup', 'title');
-```
-
-### Adding Meta Boxes
-```php
-use Lambry\Kickoff\Meta_Boxes;
-
-$meta_boxes = [
-	[
-		'id'          => 'header_section',
-		'title'       => __( 'Header Section', 'kickoff' ),
-		'description' => __( 'An example of a classic header section.', 'kickoff' ),
-		'fields'      => [
-			[
-				'id'    => 'header_color',
-				'label' => __( 'header_color', 'kickoff' ),
-				'description' => __( 'The main header color.', 'kickoff' ),
-				'type'  => 'color'
-			], [
-				'id'    => 'header_text',
-				'label' => __( 'Header Text', 'kickoff' ),
-				'description' => __( 'The main header text.', 'kickoff' ),
-				'type'  => 'textarea'
-			]
-		]
-	]
-];
-
-new Meta_Boxes( $meta_boxes );
-```
-
-#### Using Meta Boxes
-```php
-use Lambry\Kickoff\Meta_Boxes\Fields as Meta;
-
-// Get field
-Meta::get('header_color');
-// Get and echo field
-Meta::show('header_copy');
+/**
+ * @param string endpoint path
+ * @param string class name
+ */
+$router->get('settings' , 'Settings');
+$router->get('books' , 'Books');
+$router->get('genres' , 'Genres');
+$router->post('signup' , 'Signup');
 ```
