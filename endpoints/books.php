@@ -27,6 +27,71 @@ class Books {
     }
 
     /**
+     * Add a new book.
+     *
+     * @access public
+     * @param  object $request
+     * @return json $status
+     */
+    public function post($request) {
+
+        // Actually add a book
+        return rest_ensure_response([
+            'status' => 'added'
+        ]);
+
+    }
+
+    /**
+     * Update a book.
+     *
+     * @access public
+     * @param  object $request
+     * @return json $status
+     */
+    public function put($request) {
+
+        // Actually add a book
+        return rest_ensure_response([
+            'status' => 'replaced'
+        ]);
+
+    }
+
+    /**
+     * Update a book.
+     *
+     * @access public
+     * @param  object $request
+     * @return json $status
+     */
+    public function patch($request) {
+
+        // Actually add a book
+        return rest_ensure_response([
+            'status' => 'patched'
+        ]);
+
+    }
+
+    /**
+     * Delete an existing book.
+     *
+     * @access public
+     * @param  object $request
+     * @return json $status
+     */
+    public function delete($request) {
+
+        // Actually delete the book
+        return rest_ensure_response([
+            'id' => $request->get_param('id'),
+            'status' => 'deleted'
+        ]);
+
+    }
+
+    /**
      * Format a single books data.
      *
      * @access private

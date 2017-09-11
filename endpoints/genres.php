@@ -40,7 +40,7 @@ class Genres {
             'name' => $genre->name,
             'slug' => $genre->slug,
             'description' => $genre->description,
-            'path' => "{$genre->taxonomy}/{$book->slug}"
+            'path' => "{$genre->taxonomy}/{$genre->slug}"
         ];
 
     }

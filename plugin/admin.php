@@ -10,11 +10,6 @@
  */
 define('DISALLOW_FILE_EDIT', true);
 
- /**
-  * Remove ACF admin menu.
-  */
-add_filter('acf/settings/show_admin', '__return_false');
-
 /**
  * Allow SVG uploads.
  */

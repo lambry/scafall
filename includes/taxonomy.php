@@ -13,8 +13,8 @@ class Taxonomy {
 
     // Variables
     private $slug;
-    private $types = [];
     private $labels = [];
+    private $types = ['page', 'post'];
 
     /**
      * Return an instance of the class.
@@ -23,11 +23,10 @@ class Taxonomy {
      * @param mixed add()
      * @param object $this
      */
-    public function __construct($slug, $name, $plural, $types) {
+    public function __construct($slug, $name, $plural) {
 
         // Set variables
         $this->slug = $slug;
-        $this->types = array_map('sanitize_title_with_dashes', (array) $types);
         $this->labels['single'] = $name;
         $this->labels['plural'] = $plural;
 
@@ -42,12 +41,26 @@ class Taxonomy {
      * @param string $slug
      * @param string $name
      * @param string $plural
-     * @param mixed  $types
      * @return object $taxonomy
      */
-    public static function add(string $slug, string $name, string $plural, $types) {
+    public static function add(string $slug, string $name, string $plural) {
 
-        return new Taxonomy($slug, $name, $plural, $types);
+        return new Taxonomy($slug, $name, $plural);
+
+    }
+
+    /**
+     * Set up new taxonomy details.
+     *
+     * @access public
+     * @param mixed  $types
+     * @return object $this
+     */
+    public function to($types) {
+
+		$this->types = array_map('sanitize_title_with_dashes', (array) $types);
+
+		return $this;
 
     }
 

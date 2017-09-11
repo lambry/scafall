@@ -16,14 +16,18 @@ defined('ABSPATH') || exit;
 register_activation_hook(__FILE__, ['Lambry\Kickoff\Init', 'activate']);
 register_deactivation_hook(__FILE__, ['Lambry\Kickoff\Init', 'deactivate']);
 
+// Define kickoff constants
+define('KICKOFF_PREFIX', '_kickoff_');
+define('KICKOFF_URL', plugin_dir_url( __FILE__ ));
+
 class Init {
 
     /**
-     * Construct
+     * Add actions and require files.
      */
     public function __construct() {
 
-        $this->includes();
+		$this->includes();
 
         // Add admin assets
         add_action('admin_enqueue_scripts', [$this, 'admin_assets']);
@@ -48,7 +52,7 @@ class Init {
     }
 
     /**
-     * Activate Plugin
+     * Activate plugin.
      *
      * @access public
      * @return null
@@ -58,7 +62,7 @@ class Init {
     }
 
     /**
-     * Deactivate Plugin
+     * Deactivate plugin.
      *
      * @access public
      * @return null
@@ -68,7 +72,7 @@ class Init {
     }
 
     /**
-     * Admin Assets
+     * Add admin assets.
      *
      * @access public
      * @return null
@@ -78,7 +82,7 @@ class Init {
     }
 
     /**
-     * Public Assets
+     * Add public assets.
      *
      * @access public
      * @return null
