@@ -148,20 +148,28 @@ MetaBox::show('reviews_title');
 ```php
 use Lambry\Kickoff\Router;
 
-$router = new Router('kickoff');
+$route = new Router('kickoff');
 
 /**
  * @param string endpoint path
  * @param string class name
- * @param string class method
+ * @param array  options
  */
-$router->get('books', 'Books');
-$router->post('books', 'Books');
-$router->put('books/(?P<id>\d+)', 'Books');
-$router->patch('books/(?P<id>\d+)', 'Books');
-$router->delete('books/(?P<id>\d+)', 'Books');
+$route->get('books', 'Books');
+$route->post('books', 'Books');
+$route->put('books/:id', 'Books');
+$route->patch('books/:id', 'Books');
+$route->delete('books/:id', 'Books');
 
 // The resource method defines routes for get, post, put, patch and delete.
 // You could effectively replace the above with a single resource.
-$router->resource('books', 'Books');
+$route->resource('books', 'Books');
+
+// You can also specify authenticated routes and override the default callbacks.
+$route->delete('books/:id', 'Books', ['auth' => true]);
+$route->patch('books/:id', 'Books', [
+	'method' => 'updateBook',
+	'auth' => 'canupdateBook'
+]);
+
 ```

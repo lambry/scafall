@@ -31,3 +31,5 @@ cache
 .CVS
 .idea
 .sass-cache
+.vscode
+

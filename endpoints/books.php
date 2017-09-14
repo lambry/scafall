@@ -43,7 +43,7 @@ class Books {
     }
 
     /**
-     * Update a book.
+     * Replace a book.
      *
      * @access public
      * @param  object $request
@@ -51,7 +51,7 @@ class Books {
      */
     public function put($request) {
 
-        // Actually add a book
+        // Actually replace a book
         return rest_ensure_response([
             'status' => 'replaced'
         ]);
@@ -67,7 +67,7 @@ class Books {
      */
     public function patch($request) {
 
-        // Actually add a book
+        // Actually update a book
         return rest_ensure_response([
             'status' => 'patched'
         ]);
@@ -88,6 +88,20 @@ class Books {
             'id' => $request->get_param('id'),
             'status' => 'deleted'
         ]);
+
+    }
+
+    /**
+     * Authenticate route.
+     *
+     * @access public
+     * @param  object $request
+     * @return bool $authenticated
+     */
+    public function auth($request) {
+
+        // Actually check for validate auth
+        return false;
 
     }
 

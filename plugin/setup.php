@@ -110,20 +110,16 @@ MetaBox::add('review', 'Review Section', 'Reviews to display under the books inf
  * @return null
  */
 add_action('rest_api_init', function() {
-    $router = new Router('kickoff');
+    $route = new Router('kickoff');
 
 	// Add individual routes
-	$router->get('settings', 'Settings');
-	$router->get('genres', 'Genres');
+	$route->get('settings', 'Settings');
+	$route->get('genres', 'Genres');
 
 	// Supported HTTP request methods
-	$router->get('books', 'Books');
-	$router->post('books', 'Books');
-	$router->put('books/(?P<id>\d+)', 'Books');
-	$router->patch('books/(?P<id>\d+)', 'Books');
-	$router->delete('books/(?P<id>\d+)', 'Books');
-
-	// Resource method defines routes for get, post, put, patch and delete.
-	// $router->resource('books', 'Books');
-
+	$route->get('books', 'Books');
+	$route->post('books', 'Books');
+	$route->put('books/:id', 'Books');
+	$route->patch('books/:id', 'Books');
+	$route->delete('books/:id', 'Books');
 });
