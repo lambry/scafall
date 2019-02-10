@@ -7,7 +7,7 @@
 
 namespace Lambry\Kickoff\Endpoints;
 
-class Books {
+class Books extends Base {
 
     /**
      * Get all published books.
@@ -92,27 +92,13 @@ class Books {
     }
 
     /**
-     * Authenticate route.
-     *
-     * @access public
-     * @param  object $request
-     * @return bool $authenticated
-     */
-    public function auth($request) {
-
-        // Actually check for validate auth
-        return false;
-
-    }
-
-    /**
      * Format a single books data.
      *
      * @access private
      * @param object $book
      * @return array $formatted
      */
-    private function format($book) {
+    private function format($book) : array {
 
         return [
             'id' => $book->ID,

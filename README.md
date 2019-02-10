@@ -1,17 +1,17 @@
 # Kickoff
 
-A simple example/starter plugin with helpers for adding post types, taxonomies, roles, settings, meta boxes and api endpoints.
+A simple example/starter plugin with helpers for adding post types, taxonomies, sidebars, user roles, settings, meta boxes and API endpoints.
 
 ## Adding Post Types
 ```php
-use Lambry\Kickoff\PostType;
+use Lambry\Kickoff\Post;
 
 /**
  * @param string post type id / slug
  * @param string post type name single
  * @param string post type name plural
  */
-PostType::add('books', 'Book', 'Books')->set([
+Post::add('books', 'Book', 'Books')->set([
 	'menu_icon' => 'dashicons-book-alt'
 ]);
 ```
@@ -28,6 +28,19 @@ use Lambry\Kickoff\Taxonomy;
 Taxonomy::add('genre', 'Genre', 'Genres')->to('book')->set([
     'hierarchical' => true,
     'public'       => true
+]);
+```
+
+## Adding Sidebars
+```php
+use Lambry\Kickoff\Sidebar;
+
+/**
+ * @param string sidebar id
+ * @param string sidebar name
+ */
+Sidebar::add('footer', 'Footer Widget')->set([
+    'description' => 'Main footer area'
 ]);
 ```
 
@@ -94,17 +107,17 @@ $intro = Setting::get('general', 'authors_intro');
 Setting::show('display', 'book_color');
 ```
 
-## Adding MetaBoxes (and using custom fields)
+## Adding Meta Boxes (and using custom fields)
 `Field types include: text, textarea, editor, select, radio, checkbox, on_off, upload, color and repeater`.
 ```php
-use Lambry\Kickoff\MetaBox;
+use Lambry\Kickoff\Meta;
 
 /**
  * @param string id
  * @param string title
  * @param string description
  */
- MetaBox::add('review', 'Review Section', 'Reviews to display under the books info.')
+ Meta::add('review', 'Review Section', 'Reviews to display under the books info.')
 	->fields([
         [
             'id'    => 'reviews_display',
@@ -135,13 +148,13 @@ use Lambry\Kickoff\MetaBox;
 ])->to('book')->set();
 
 // Get a custom fields data with the loop
-MetaBox::get('reviews_display');
+Meta::get('reviews_display');
 
 // Get a custom fields data outside the loop
-MetaBox::get('reviews_display', $post_id);
+Meta::get('reviews_display', $post_id);
 
 // Echo a custom fields data
-MetaBox::show('reviews_title');
+Meta::show('reviews_title');
 ```
 
 ## Adding API endpoints

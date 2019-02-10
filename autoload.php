@@ -1,12 +1,14 @@
 <?php
 
 return [
-    'includes/post-type',
+	'includes/post',
     'includes/taxonomy',
-    'includes/user-role',
+    'includes/sidebar',
+    'includes/role',
+    'includes/meta',
     'includes/setting',
-    'includes/meta-box',
     'includes/router',
+    'endpoints/base',
     'endpoints/books',
     'endpoints/genres',
     'endpoints/settings',

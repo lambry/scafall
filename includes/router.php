@@ -121,17 +121,15 @@ class Router {
     private function register(string $method, string $uri, string $class, $options = []) {
 
 		$endpoint = $this->endpoints . '\\' . $class;
-        $rest_uri = str_replace(':', '', preg_replace('/(:[a-z]*)/i', '(?P<$0>\d+)', $uri));
+		$rest_uri = str_replace(':', '', preg_replace('/(:[a-z]*)/i', '(?P<$0>\d+)', $uri));
 
-        $options = wp_parse_args($options, ['method' => $method]);
+		$options = wp_parse_args($options, ['method' => $method]);
 
-		$i = isset($options['auth']) ? [new $endpoint, $options['auth'] !== true ? $options['auth'] : 'auth'] : null;
-
-        register_rest_route($this->api, "/{$rest_uri}", [
-            'methods' => $method,
-            'callback' => [new $endpoint, $options['method']],
-            'permission_callback' => isset($options['auth']) ? [new $endpoint, $options['auth'] !== true ? $options['auth'] : 'auth'] : null
-        ]);
+		register_rest_route($this->api, "/{$rest_uri}", [
+			'methods' => $method,
+			'callback' => [new $endpoint, $options['method']],
+			'permission_callback' => isset($options['auth']) ? [new $endpoint, $options['auth'] !== true ? $options['auth'] : 'auth'] : null
+		]);
 
     }
 

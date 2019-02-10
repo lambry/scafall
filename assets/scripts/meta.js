@@ -1,23 +1,23 @@
 /**
- * Meta Box js.
+ * Meta js.
  *
  * Contains all of the JavaScript to handle meta box.
  */
 
 (function($) {
 
-	var MetaBox = {
+	var Meta = {
 		/*** Get things started ***/
 		init: function() {
 			// Handle uploads
-			$('.kickoff-meta-box').on('click', '.upload-select', this.selectUpload);
-			$('.kickoff-meta-box').on('click', '.upload-remove', this.removeUpload);
+			$('.kickoff-meta').on('click', '.upload-select', this.selectUpload);
+			$('.kickoff-meta').on('click', '.upload-remove', this.removeUpload);
 			// Handle repeaters
-			$('.kickoff-meta-box .meta-sortable').sortable({ placeholder: 'repeater-gap' });
-			$('.kickoff-meta-box').on('click', '.repeater-add', this.addRepeater);
-			$('.kickoff-meta-box').on('click', '.repeater-remove', this.removeRepeater);
+			$('.kickoff-meta .meta-sortable').sortable({ placeholder: 'repeater-gap' });
+			$('.kickoff-meta').on('click', '.repeater-add', this.addRepeater);
+			$('.kickoff-meta').on('click', '.repeater-remove', this.removeRepeater);
 			// Load color picker
-			$('.kickoff-meta-box .color-picker').wpColorPicker();
+			$('.kickoff-meta .color-picker').wpColorPicker();
 		},
 		/*** Launch media manager ***/
 		selectUpload: function(e) {
@@ -64,7 +64,7 @@
 					newNumber = parseInt(oldName.match('([0-9]+)')[0]) + 1,
 					newName = oldName.replace(new RegExp('([0-9]+)'), newNumber);
 				$this.attr('name', newName);
-				if ($this.is(':text') || $this.is('[type=hidden]') || $this.is('textarea') || $this.is('select')  {
+				if ($this.is(':text') || $this.is('[type=hidden]') || $this.is('textarea') || $this.is('select')) {
 					$this.val('');
 				}
 				if ($this.is(':radio') || $this.is(':checkbox')) {
@@ -91,6 +91,6 @@
 			}
 		}
 	};
-	MetaBox.init();
+	Meta.init();
 
 })(jQuery);

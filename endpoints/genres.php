@@ -7,7 +7,7 @@
 
 namespace Lambry\Kickoff\Endpoints;
 
-class Genres {
+class Genres extends Base {
 
     /**
      * Get all genres.
@@ -33,7 +33,7 @@ class Genres {
      * @param object $book
      * @return array $formatted
      */
-    private function format($genre) {
+    private function format($genre) : array {
 
         return [
             'id' => $genre->term_id,

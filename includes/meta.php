@@ -9,9 +9,8 @@ namespace Lambry\Kickoff;
 
 defined('ABSPATH') || exit;
 
-class MetaBox {
+class Meta {
 
-    // Variables
     private $id;
     private $title;
     private $description;
@@ -26,9 +25,8 @@ class MetaBox {
      * @param mixed add()
      * @param object $this
      */
-    public function __construct($id, $title, $description) {
+    public function __construct(string $id, string $title, string $description) {
 
-        // Set variables
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
@@ -46,9 +44,9 @@ class MetaBox {
      * @param string $description
      * @param object $metabox
      */
-    public static function add(string $id, string $title, string $description) {
+    public static function add(string $id, string $title, string $description = '') : Meta {
 
-        return new MetaBox($id, $title, $description);
+        return new Meta($id, $title, $description);
 
     }
 
@@ -141,8 +139,8 @@ class MetaBox {
         if ($hook !== 'post-new.php' && $hook !== 'post.php') return;
 
         wp_enqueue_media();
-        wp_enqueue_style('kickoff-meta-box-styles', KICKOFF_URL . 'assets/styles/meta-box.css', ['wp-color-picker'], '1.0.0');
-        wp_enqueue_script('kickoff-meta-box-scripts', KICKOFF_URL . 'assets/scripts/meta-box.js', ['jquery', 'wp-color-picker'], '1.0.0', true);
+        wp_enqueue_style('kickoff-meta-styles', KICKOFF_URL . 'assets/styles/meta.css', ['wp-color-picker'], '1.0.0');
+        wp_enqueue_script('kickoff-meta-scripts', KICKOFF_URL . 'assets/scripts/meta.js', ['jquery', 'wp-color-picker'], '1.0.0', true);
 
     }
 
@@ -198,12 +196,12 @@ class MetaBox {
      */
     public function display() { ?>
 
-        <div class="kickoff-meta-box">
+        <div class="kickoff-meta">
             <?php
                 wp_nonce_field('kickoff_meta_box', 'kickoff_meta_box_nonce');
 
                 if ($this->description) {
-                    echo "<p class='meta-box-description'>{$this->description}</p>";
+                    echo "<p class='meta-description'>{$this->description}</p>";
                 }
 
                 foreach ($this->fields as $field) {
@@ -540,7 +538,7 @@ class MetaBox {
      * @param  string $field
      * @return string $name
      */
-    public function name(array $field) {
+    public function name(array $field) : string {
 
         if (isset($field['repeater'])) {
             return KICKOFF_PREFIX . $field['repeater']['id'] . '[' . $field['repeater']['inc'] . ']' . '[' . $field['id'] . ']';
@@ -625,7 +623,7 @@ class MetaBox {
      * @access private
      * @return array $options
      */
-    private function options() {
+    private function options() : array {
 
         return [
             'context'  => 'normal',
@@ -641,7 +639,7 @@ class MetaBox {
      * @param  array $array
      * @return array $array
      */
-    public function sanitize_array($array) {
+    public function sanitize_array($array) : array {
 
         if (! is_array($array)) {
             return wp_strip_all_tags($array);
@@ -664,7 +662,7 @@ class MetaBox {
      * @param  array $array
      * @return array $filtered_array
      */
-    public function filter_array(array $array) {
+    public function filter_array(array $array) : array {
 
         $filtered_array = [];
 

@@ -11,7 +11,6 @@ defined('ABSPATH') || exit;
 
 class Setting {
 
-	// Variables
     private $type;
     private $menu;
     private $title;
@@ -27,9 +26,8 @@ class Setting {
      * @param mixed add()
      * @param object $this
      */
-	public function __construct($type, $menu, $title) {
+	public function __construct(string $type, string $menu, string $title) {
 
-        // Set variables
 		$this->type = $type;
         $this->menu = $menu;
         $this->title = $title;
@@ -48,7 +46,7 @@ class Setting {
      * @param string $title
      * @param object $setting
      */
-    public static function add(string $type, string $menu, string $title) {
+    public static function add(string $type, string $menu, string $title) : Setting {
 
         return new Setting($type, $menu, $title);
 
@@ -478,7 +476,7 @@ class Setting {
 	 * @param  string $field
 	 * @return string $name
 	 */
-	private function name(array $field) {
+	private function name(array $field) : string {
 
 		return $field['section'] . '[' . $field['id'] . ']';
 
@@ -492,7 +490,7 @@ class Setting {
 	 * @param mixed $default
 	 * @return string $option
 	 */
-	private function value(array $field, $default = '') {
+	private function value(array $field, $default = '') : string {
 
 		$options = get_option($field['section']);
 		return $options[$field['id']] ?? $default;
@@ -520,7 +518,7 @@ class Setting {
 	 * @access private
 	 * @return string $tab
 	 */
-	private function tab() {
+	private function tab() : string {
 
 		return $_GET['tab'] ?? $this->sections[0]['id'];
 
@@ -549,7 +547,7 @@ class Setting {
 	 * @param  mixed  $default
 	 * @return string $setting
 	 */
-	public static function get(string $section, $field = '', $default = false) {
+	public static function get(string $section, $field = '', $default = false) : string {
 
 		$setting = get_option(KICKOFF_PREFIX . $section, $default);
 
@@ -567,7 +565,7 @@ class Setting {
      * @access private
      * @return array $options
      */
-    private function options() {
+    private function options() : array {
 
         return [
             'capability' => 'manage_options',

@@ -7,7 +7,7 @@
 
 namespace Lambry\Kickoff\Endpoints;
 
-class Settings {
+class Settings extends Base {
 
     /**
      * Get's all settings options.

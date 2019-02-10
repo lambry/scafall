@@ -1,38 +1,38 @@
-/* Meta Box
+/* Meta
 ----------------------------------------------- */
 
 /* General */
-.kickoff-meta-box .meta-field {
+.kickoff-meta .meta-field {
 	margin: 1em 0.5em 1em 0;
 }
-.kickoff-meta-box .description {
+.kickoff-meta .description {
 	font-size: 0.8em;
 	font-style: italic;
 }
 
 /* Form */
-.kickoff-meta-box label {
+.kickoff-meta label {
 	font-weight: bold;
 	display: block;
 	margin-bottom: 0.25em;
 }
-.kickoff-meta-box label input {
+.kickoff-meta label input {
 	margin-left: 0.5em;
 }
-.kickoff-meta-box select,
-.kickoff-meta-box textarea,
-.kickoff-meta-box input[type=text] {
+.kickoff-meta select,
+.kickoff-meta textarea,
+.kickoff-meta input[type=text] {
 	width: 100%;
 }
 
 /* Upload Manager */
-.kickoff-meta-box .upload-image {
+.kickoff-meta .upload-image {
 	position: relative;
 	display: inline-block;
 	margin-top: 0.75em;
 	max-width: 100%;
 }
-.kickoff-meta-box .upload-image img {
+.kickoff-meta .upload-image img {
 	max-width: 100%;
 	max-height: 20em;
 	padding: 0.15em;
@@ -42,7 +42,7 @@
 }
 
 /* Repeater Fields */
-.kickoff-meta-box .repeater {
+.kickoff-meta .repeater {
 	cursor: move;
 	position: relative;
 	display: inline-block;
@@ -54,10 +54,10 @@
 	border: 1px solid #efefef;
 	border-radius: 0.25em;
 }
-.kickoff-meta-box .repeater img {
+.kickoff-meta .repeater img {
 	max-width: 100%;
 }
-.kickoff-meta-box .repeater-gap {
+.kickoff-meta .repeater-gap {
 	width: 12em;
 	height: 12em;
 	display: inline-block;
@@ -67,12 +67,12 @@
 	border-radius: 0.25em;
 	box-shadow: 0 0 1em rgba(0, 0, 0, 0.1) inset;
 }
-.kickoff-meta-box .repeater-add {
+.kickoff-meta .repeater-add {
 	margin-top: 1em;
 }
 
 /* Remove Icon */
-.kickoff-meta-box .remove {
+.kickoff-meta .remove {
 	position: absolute;
 	right: -0.5em;
 	top: -0.5em;
@@ -81,17 +81,17 @@
 	border-radius: 50%;
 	background-color: #ff4545;
 }
-.kickoff-meta-box .repeater .upload .remove {
+.kickoff-meta .repeater .upload .remove {
 	background-color: #bababa;
 }
 
 /* Helpers */
-.kickoff-meta-box .block {
+.kickoff-meta .block {
 	display: block;
 }
-.kickoff-meta-box .hide {
+.kickoff-meta .hide {
 	display: none;
 }
-.kickoff-meta-box .show {
+.kickoff-meta .show {
 	display: inline-block;
 }

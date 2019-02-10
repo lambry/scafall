@@ -1,20 +1,20 @@
 <?php
 /***
- * Examples on adding post types, taxonomies, user roles, settings, meta boxes and api endpoints.
+ * Examples on adding post types, taxonomies, user roles, sidebars, settings, meta boxes and API endpoints.
  *
  * @package Kickoff
  */
 
 namespace Lambry\Kickoff;
 
-use Lambry\Kickoff\{PostType, Taxonomy, Role, Setting, MetaBox, Router};
+use Lambry\Kickoff\{Post, Taxonomy, Role, Sidebar, Setting, Meta, Router};
 
 defined('ABSPATH') || exit;
 
 /**
  * Register book post type.
  */
-PostType::add('book', 'Book', 'Books')->set([
+Post::add('book', 'Book', 'Books')->set([
     'menu_icon' => 'dashicons-book-alt'
 ]);
 
@@ -27,11 +27,18 @@ Taxonomy::add('genre', 'Genre', 'Genres')->to('book')->set([
 ]);
 
 /**
- * Register cutomer user role.
+ * Register customer user role.
  */
 Role::add('customer', 'Customer')->set([
     'publish_posts' => false,
     'read'          => true
+]);
+
+/**
+ * Register footer sidebar/widget.
+ */
+Sidebar::add('footer', 'Footer Widget')->set([
+    'description' => 'Main footer area'
 ]);
 
 /**
@@ -73,7 +80,7 @@ Setting::add('menu', 'Options', 'Plugin Options')
 /**
  * Register a metabox with fields.
  */
-MetaBox::add('review', 'Review Section', 'Reviews to display under the books info.')
+Meta::add('review', 'Review Section', 'Reviews to display under the books info.')
 	->fields([
         [
             'id'    => 'reviews_display',
@@ -113,13 +120,13 @@ add_action('rest_api_init', function() {
     $route = new Router('kickoff');
 
 	// Add individual routes
-	$route->get('settings', 'Settings');
 	$route->get('genres', 'Genres');
+	$route->get('settings', 'Settings');
 
 	// Supported HTTP request methods
 	$route->get('books', 'Books');
-	$route->post('books', 'Books');
-	$route->put('books/:id', 'Books');
-	$route->patch('books/:id', 'Books');
-	$route->delete('books/:id', 'Books');
+	$route->post('books', 'Books', ['auth' => true]);
+	$route->put('books/:id', 'Books', ['auth' => true]);
+	$route->patch('books/:id', 'Books', ['auth' => true]);
+	$route->delete('books/:id', 'Books', ['auth' => true]);
 });
