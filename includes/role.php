@@ -1,82 +1,62 @@
 <?php
+
 /**
  * Create a new user role.
  *
- * @package Kickoff
+ * @package Scafall
  */
 
-namespace Lambry\Kickoff;
+namespace Lambry\Scafall;
 
 defined('ABSPATH') || exit;
 
-class Role {
+class Role
+{
+	private array $capabilities = [];
 
-    private $slug;
-    private $name;
-
-    /**
-     * Return an instance of the class.
-     *
-     * @access public
-     * @param mixed add()
-     * @return object $this
-     */
-    public function __construct($slug, $name) {
-
-        $this->slug = $slug;
-        $this->name = $name;
+	/**
+	 * Setup properties and add actions.
+	 */
+	public function __construct(private string $slug, private string $name)
+	{
+		add_action('init', [$this, 'register']);
 
 		return $this;
-
-    }
-
-    /**
-	 * Set up new post type details.
-	 *
-	 * @access public
-	 * @param string $slug
-	 * @param string $name
-	 * @return object $role
-	 */
-    public static function add(string $slug, string $name) : Role {
-
-		return new Role($slug, $name);
-
-    }
-
-    /**
-     * Set options and add role.
-     *
-     * @access public
-     * @param array options
-     * @return void
-     */
-    public function set(array $options = []) {
-
-        $capabilities = wp_parse_args($options, $this->capabilities());
-
-		add_role($this->slug, $this->name, $capabilities);
-
-    }
-
-    /**
-     * Setup the default capabilities.
-     *
-     * @access private
-     * @return array $capabilities
-     */
-    private function capabilities() : array {
-
-        return [
-            'read' => true,
-            'upload_files' => true,
-            'publish_posts' => false,
-            'edit_posts' => false,
-            'edit_published_posts' => false,
-            'delete_posts' => false,
-            'delete_published_posts' => false
-		];
-
 	}
 
+	/**
+	 * Set up new post type details.
+	 */
+	public static function add(string $slug, string $name): Role
+	{
+		return new Role($slug, $name);
+	}
+
+	/**
+	 * Set role capabilities.
+	 */
+	public function capabilities(mixed $capabilities): self
+	{
+		$this->capabilities = (array) $capabilities;
+
+		return $this;
+	}
+
+	/**
+	 * Add the new role.
+	 */
+	public function register(): void
+	{
+		$capabilities = wp_parse_args($this->capabilities, $this->defaults());
+
+		add_role($this->slug, $this->name, $capabilities);
+	}
+
+	/**
+	 * Setup the default options.
+	 */
+	public function defaults(): array
+	{
+		return ['read' => true];
+	}
 }

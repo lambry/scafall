@@ -1,188 +1,161 @@
-# Kickoff
+# Scafall
 
-A simple example/starter plugin with helpers for adding post types, taxonomies, sidebars, user roles, settings, meta boxes and API endpoints.
+A little plugin that makes scaffolding post types, taxonomies, user roles, options, meta boxes, rest endpoints and frontend routes easier.
 
-## Adding Post Types
+## Post Types
+
 ```php
-use Lambry\Kickoff\Post;
+use Lambry\Scafall\Post;
 
-/**
- * @param string post type id / slug
- * @param string post type name single
- * @param string post type name plural
- */
-Post::add('books', 'Book', 'Books')->set([
-	'menu_icon' => 'dashicons-book-alt'
-]);
+// Adding a post type
+Post::add('team', 'Team', 'Team Members');
+
+// Overriding the default supports
+Post::add('faq', 'FAQ', 'FAQs')->supports(['title', 'editor']);
+
+// Overriding the default options
+Post::add('book', 'Book', 'Books')->options(['menu_icon' => 'dashicons-book']);
 ```
 
-## Adding Taxonomies
-```php
-use Lambry\Kickoff\Taxonomy;
+## Taxonomies
 
-/**
- * @param string taxomomy id / slug
- * @param string taxonomy name single
- * @param string taxonomy name plural
- */
-Taxonomy::add('genre', 'Genre', 'Genres')->to('book')->set([
-    'hierarchical' => true,
-    'public'       => true
-]);
+```php
+use Lambry\Scafall\Taxonomy;
+
+// Adding a taxonomy
+Taxonomy::add('genre', 'Genre', 'Genres')->to('book');
+
+// Overriding the default options
+Taxonomy::add('genre', 'Genre', 'Genres')->options(['hierarchical' => true])->to('book');
 ```
 
-## Adding Sidebars
-```php
-use Lambry\Kickoff\Sidebar;
+## User Roles
 
-/**
- * @param string sidebar id
- * @param string sidebar name
- */
-Sidebar::add('footer', 'Footer Widget')->set([
-    'description' => 'Main footer area'
-]);
+```php
+use Lambry\Scafall\Role;
+
+// Adding a role
+Role::add('proofreader', 'Proofreader');
+
+// Overriding the default capabilities
+Role::add('proofreader', 'Proofreader')->capabilities(['edit_posts' => true]);
 ```
 
-## Adding User Roles
-```php
-use Lambry\Kickoff\Role;
+## Options
 
-/**
- * @param string role id / slug
- * @param string role name
- */
-Role::add('customer', 'Customer')->set([
-	'publish_posts' => false,
-	'read'          => true
-]);
+```php
+use Lambry\Scafall\Option;
+
+// Adding a new options page
+Option::add('Options', 'Main Options')
+	->section('display', 'Display', function($field) {
+		$field->text('notice_title', 'Notice title');
+		$field->number('notice_delay', 'Notice delay');
+		$field->textarea('notice_content', 'Notice content');
+		$field->upload('notice_image', 'Notice image');
+		$field->colour('notice_colour', 'Notice colour');
+		$field->date('notice_date', 'Show notice until');
+		$field->checkbox('notice_display', 'Show notice on')->options(['page' => 'Pages', 'post' => 'Posts']);
+	})
+	->section('general', 'General', function($field) {
+		$field->email('contact_email', 'Contact email');
+		$field->url('api_url', 'API URL');
+		$field->password('api_key', 'API Key');
+		$field->select('api_cache', 'Cache duration')->options(['60' => '1 hour', '120' => '2 hours']);
+		$field->radio('maps_type', 'Default map type')->options(['map' => 'Map', 'satellite' => 'Satellite']);
+		$field->boolean('maintenance_mode', 'Unable maintenance mode');
+	})
+	->to('menu');
 ```
 
-## Adding Settings Screens (and using said settings)
-`Field types include: text, textarea, editor, select, radio, checkbox, on_off, upload, color and block`.
+## Meta Boxes
+
 ```php
-use Lambry\Kickoff\Setting;
+use Lambry\Scafall\Meta;
 
-/**
- * @param string menu type
- * @param string menu name
- * @param string page title
- */
-Setting::add('menu', 'Options', 'Plugin Options')
-    ->section('general', 'General', 'Generic plugin options', [
-        [
-            'id'    => 'display_authors',
-            'label' => 'Display author card',
-            'type'  => 'on_off'
-        ], [
-            'id'    => 'authors_intro',
-            'label' => 'Authors intro copy',
-            'description' => 'This section will be displayed above all authors.',
-            'type'  => 'editor'
-        ]
-    ])
-    ->section('display', 'Display', 'Display specific options', [
-        [
-            'id'    => 'book_color',
-            'label' => 'Book icon color',
-            'type'  => 'color'
-        ], [
-            'id'    => 'book_position',
-            'label' => 'Book icon position',
-            'type'  => 'radio',
-            'choices' => [
-                'left' => 'Left',
-                'right' => 'Right'
-            ]
-        ]
-])->set();
-
-// Get all settings within a section
-$section = Setting::get('general');
-
-// Get a specific setting field
-$intro = Setting::get('general', 'authors_intro');
-
-// Echo specific setting field
-Setting::show('display', 'book_color');
+// Adding a new meta box
+Meta::add('author', 'Author Details')->fields(function($field) {
+	$field->info('author_info', 'Information all about the author');
+	$field->boolean('author_active', 'Display author details');
+	$field->colour('author_colour', 'Background colour');
+	$field->upload('author_background', 'Background image');
+	$field->date('author_dob', 'Date of birth');
+	$field->editor('author_bio', 'Bio');
+	$field->email('author_email', 'Email address');
+	$field->radio('author_rating', 'Avg Rating')->options(['3' => '3 stars', '4' => '4 stars', '5' => '5 stars']);
+	$field->select('author_publisher', 'Publisher')->options(['penguin' => 'Penguin', 'harpercollins' => 'HarperCollins']);
+	$field->checkbox('author_awards', 'Awards')->options(['bestseller' => 'Bestseller', 'pulitzer' => 'Pulitzer']);
+})
+->to('book');
 ```
 
-## Adding Meta Boxes (and using custom fields)
-`Field types include: text, textarea, editor, select, radio, checkbox, on_off, upload, color and repeater`.
+## Routes
+
 ```php
-use Lambry\Kickoff\Meta;
+use Lambry\Scafall\Route;
 
-/**
- * @param string id
- * @param string title
- * @param string description
- */
- Meta::add('review', 'Review Section', 'Reviews to display under the books info.')
-	->fields([
-        [
-            'id'    => 'reviews_display',
-            'label' => 'Display review section',
-            'description' => 'Check here to display all reviews on this page.',
-            'type'  => 'on_off'
-        ], [
-            'id'    => 'reviews_title',
-            'label' => 'Reviewer section title',
-            'type'  => 'text'
-        ]
-    ])
-    ->repeat('reviews', 'Reviews', 'Add as many reviews as neeeded below.', [
-        [
-            'id'    => 'reviewer_name',
-            'label' => 'Reviewer name',
-            'type'  => 'text'
-        ], [
-            'id'    => 'reviewer_rating',
-            'label' => 'Reviewer rating',
-			'type'  => 'radio',
-			'choices' => [
-                'one' => 'One Star',
-                'two' => 'Two Stars',
-                'three' => 'Three Stars'
-            ]
-        ]
-])->to('book')->set();
+// Adding a new group of routes
+Route::prefix('team')->group(function($route) {
+	// Adding routes
+	$route->get('/dashboard', $callback);
 
-// Get a custom fields data with the loop
-Meta::get('reviews_display');
+	// Using a controller to manage routes
+	$route->get('/members', MembersController::class);
+	$route->post('/members', MembersController::class);
+	$route->put('/members/{id}', MembersController::class);
+	$route->patch('/members/{id}', MembersController::class);
+	$route->delete('/members/{id}', MembersController::class);
 
-// Get a custom fields data outside the loop
-Meta::get('reviews_display', $post_id);
+	// Overriding the default callback method
+	$route->get('/members', [MembersController::class, 'index']);
 
-// Echo a custom fields data
-Meta::show('reviews_title');
+	// Checking the authed users capabilities
+	$route->patch('/members/{id}', MembersController::class)->can('edit_member');
+
+	// Checking the authed users role
+	$route->delete('/members/{id}', MembersController::class)->role('manager');
+
+	// Custom authentication via the auth method
+	$route->delete('/members/{id}', MembersController::class)->auth($callback);
+
+	// Nested routes
+	$rest->get('/members/{id}/posts/{slug}', $callback);
+});
 ```
 
-## Adding API endpoints
+## Rest endpoints
+
 ```php
-use Lambry\Kickoff\Router;
+use Lambry\Scafall\Rest;
 
-$route = new Router('kickoff');
+// Adding a new namespaced group of endpoints
+Rest::prefix('theme/v1')->group(function($rest) {
+	// Adding endpoints
+	$rest->get('/options', $callback);
 
-/**
- * @param string endpoint path
- * @param string class name
- * @param array  options
- */
-$route->get('books', 'Books');
-$route->post('books', 'Books');
-$route->put('books/:id', 'Books');
-$route->patch('books/:id', 'Books');
-$route->delete('books/:id', 'Books');
+	// Using a controller to manage endpoints
+	$rest->get('/books', BookController::class);
+	$rest->post('/books', BookController::class);
+	$rest->put('/books/{slug}', BookController::class);
+	$rest->patch('/books/{slug}', BookController::class);
+	$rest->delete('/books/{slug}', BookController::class);
 
-// The resource method defines routes for get, post, put, patch and delete.
-// You could effectively replace the above with a single resource.
-$route->resource('books', 'Books');
+	// Overriding the default callback method
+	$rest->get('/books', [BookController::class, 'index']);
 
-// You can also specify authenticated routes and override the default callbacks.
-$route->delete('books/:id', 'Books', ['auth' => true]);
-$route->patch('books/:id', 'Books', [
-	'method' => 'updateBook',
-	'auth' => 'canupdateBook'
-]);
+	// Checking the authed users capabilities
+	$rest->patch('/books/{slug}', BookController::class)->can('edit_book');
 
+	// Checking the authed users role
+	$rest->delete('/books/{slug}', BookController::class)->role('editor');
+
+	// Custom authentication via the auth method
+	$rest->delete('/books/{slug}', BookController::class)->auth($callback);
+
+	// Nested endpoints
+	$rest->get('/books/{slug}/chapter/{id}', $callback);
+});
 ```
+To use the put, patch and delete routes you'll need to add a hidden field named `_method` with a value of `PUT`, `PATCH` or `DELETE`.
+
+Notes: requires PHP 8.0+

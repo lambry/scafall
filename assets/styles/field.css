@@ -1,0 +1,80 @@
+/* Options */
+.scafall-upload {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
+}
+
+.scafall-upload-preview {
+  display: none;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.scafall-upload-image, .scafall-upload-file {
+  margin: 0;
+  display: none;
+  padding: 0.25rem;
+  max-width: 25rem;
+  max-height: 25rem;
+  background-color: #fafafa;
+  -webkit-box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.25);
+          box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.25);
+}
+
+.scafall-upload-file {
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
+}
+
+.scafall-upload-remove {
+  position: absolute;
+  right: -0.75rem;
+  top: -0.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #d63638;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.scafall-info {
+  font-size: 1.125em;
+}
+
+.scafall-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.scafall-show {
+  display: inline-block;
+}
+
+.scafall-option .scafall-label {
+  display: none;
+}
+
+.scafall-meta .scafall-field {
+  display: block;
+  margin-bottom: 1.25rem;
+}
+/*# sourceMappingURL=field.css.map */
