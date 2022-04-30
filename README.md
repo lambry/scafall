@@ -2,6 +2,8 @@
 
 A little plugin that makes scaffolding post types, taxonomies, user roles, options, meta boxes, rest endpoints and frontend routes easier.
 
+Install: `composer require lambry/scafall`
+
 ## Post Types
 
 ```php
@@ -50,20 +52,25 @@ use Lambry\Scafall\Option;
 Option::add('Options', 'Main Options')
 	->section('display', 'Display', function($field) {
 		$field->text('notice_title', 'Notice title');
-		$field->number('notice_delay', 'Notice delay');
-		$field->textarea('notice_content', 'Notice content');
 		$field->upload('notice_image', 'Notice image');
-		$field->colour('notice_colour', 'Notice colour');
+		$field->number('notice_delay', 'Notice delay');
 		$field->date('notice_date', 'Show notice until');
-		$field->checkbox('notice_display', 'Show notice on')->options(['page' => 'Pages', 'post' => 'Posts']);
+		$field->colour('notice_colour', 'Notice colour');
+		$field->textarea('notice_content', 'Notice content');
 	})
-	->section('general', 'General', function($field) {
-		$field->email('contact_email', 'Contact email');
+	->section('Extras', 'Extras', function($field) {
 		$field->url('api_url', 'API URL');
 		$field->password('api_key', 'API Key');
-		$field->select('api_cache', 'Cache duration')->options(['60' => '1 hour', '120' => '2 hours']);
-		$field->radio('maps_type', 'Default map type')->options(['map' => 'Map', 'satellite' => 'Satellite']);
-		$field->boolean('maintenance_mode', 'Unable maintenance mode');
+		$field->email('contact_email', 'Contact email');
+		$field->toggle('maintenance_mode', 'Unable maintenance mode');
+		$field->range('api_cache', 'Cache duration')->attributes([
+			'min' => 30,
+			'max' => 120
+		]);
+		$field->radio('map_type', 'Default map type')->options([
+			'map' => 'Map',
+			'sat' => 'Satellite'
+		]);
 	})
 	->to('menu');
 ```
@@ -76,17 +83,57 @@ use Lambry\Scafall\Meta;
 // Adding a new meta box
 Meta::add('author', 'Author Details')->fields(function($field) {
 	$field->info('author_info', 'Information all about the author');
-	$field->boolean('author_active', 'Display author details');
+	$field->toggle('author_active', 'Display author details');
 	$field->colour('author_colour', 'Background colour');
-	$field->upload('author_background', 'Background image');
+	$field->email('author_email', 'Email address');
 	$field->date('author_dob', 'Date of birth');
 	$field->editor('author_bio', 'Bio');
-	$field->email('author_email', 'Email address');
-	$field->radio('author_rating', 'Avg Rating')->options(['3' => '3 stars', '4' => '4 stars', '5' => '5 stars']);
-	$field->select('author_publisher', 'Publisher')->options(['penguin' => 'Penguin', 'harpercollins' => 'HarperCollins']);
-	$field->checkbox('author_awards', 'Awards')->options(['bestseller' => 'Bestseller', 'pulitzer' => 'Pulitzer']);
+	$field->select('author_publisher', 'Publisher')->options([
+		'penguin' => 'Penguin',
+		'harpercollins' => 'HarperCollins'
+	]);
+	$field->checkbox('author_awards', 'Awards')->options([
+		'pulitzer' => 'Pulitzer',
+		'bestseller' => 'Bestseller'
+	]);
 })
 ->to('book');
+```
+
+The field types available for use within options pages and meta boxes are: `text`, `number`, `email`, `date`, `range`, `url`, `password`, `textarea`, `editor`, `select`, `radio`, `checkbox`, `toggle`, `upload`, `colour` and `info`.
+
+## Rest endpoints
+
+```php
+use Lambry\Scafall\Rest;
+
+// Adding a new namespaced group of endpoints
+Rest::prefix('theme/v1')->group(function($rest) {
+	// Adding endpoints
+	$rest->get('/options', fn() => rest_ensure_response(['data' => 'value']));
+
+	// Using a controller to manage endpoints
+	$rest->get('/books', BookController::class);
+	$rest->post('/books', BookController::class);
+	$rest->put('/books/{slug}', BookController::class);
+	$rest->patch('/books/{slug}', BookController::class);
+	$rest->delete('/books/{slug}', BookController::class);
+
+	// Overriding the default callback method
+	$rest->get('/books', [BookController::class, 'index']);
+
+	// Checking the authed users capabilities
+	$rest->patch('/books/{slug}', BookController::class)->can('edit_book');
+
+	// Checking the authed users role
+	$rest->delete('/books/{slug}', BookController::class)->role('editor');
+
+	// Custom authentication via the auth method
+	$rest->delete('/books/{slug}', BookController::class)->auth($callback);
+
+	// Nested endpoints
+	$rest->get('/books/{slug}/chapter/{id}', $callback);
+});
 ```
 
 ## Routes
@@ -97,7 +144,7 @@ use Lambry\Scafall\Route;
 // Adding a new group of routes
 Route::prefix('team')->group(function($route) {
 	// Adding routes
-	$route->get('/dashboard', $callback);
+	$route->get('/dashboard', fn() => get_template_directory() . '/team/dashboard.php');
 
 	// Using a controller to manage routes
 	$route->get('/members', MembersController::class);
@@ -123,39 +170,6 @@ Route::prefix('team')->group(function($route) {
 });
 ```
 
-## Rest endpoints
-
-```php
-use Lambry\Scafall\Rest;
-
-// Adding a new namespaced group of endpoints
-Rest::prefix('theme/v1')->group(function($rest) {
-	// Adding endpoints
-	$rest->get('/options', $callback);
-
-	// Using a controller to manage endpoints
-	$rest->get('/books', BookController::class);
-	$rest->post('/books', BookController::class);
-	$rest->put('/books/{slug}', BookController::class);
-	$rest->patch('/books/{slug}', BookController::class);
-	$rest->delete('/books/{slug}', BookController::class);
-
-	// Overriding the default callback method
-	$rest->get('/books', [BookController::class, 'index']);
-
-	// Checking the authed users capabilities
-	$rest->patch('/books/{slug}', BookController::class)->can('edit_book');
-
-	// Checking the authed users role
-	$rest->delete('/books/{slug}', BookController::class)->role('editor');
-
-	// Custom authentication via the auth method
-	$rest->delete('/books/{slug}', BookController::class)->auth($callback);
-
-	// Nested endpoints
-	$rest->get('/books/{slug}/chapter/{id}', $callback);
-});
-```
-To use the put, patch and delete routes you'll need to add a hidden field named `_method` with a value of `PUT`, `PATCH` or `DELETE`.
+To use the put, patch and delete methods with frontend routes you'll need to add a hidden field named `_method` with a value of `PUT`, `PATCH` or `DELETE`.
 
 Notes: requires PHP 8.0+

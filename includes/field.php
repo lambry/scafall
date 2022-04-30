@@ -35,6 +35,16 @@ class Field
 	}
 
 	/**
+	 * Add attributes to field.
+	 */
+	public function attributes(array $attributes): self
+	{
+		$this->fields[array_key_last($this->fields)]['attributes'] = $attributes;
+
+		return $this;
+	}
+
+	/**
 	 * Add a text field to fields.
 	 */
 	public function text(string $name, string $label): self
@@ -155,11 +165,11 @@ class Field
 	}
 
 	/**
-	 * Add a boolean field to fields.
+	 * Add a toggle field to fields.
 	 */
-	public function boolean(string $name, string $label): self
+	public function toggle(string $name, string $label): self
 	{
-		$this->addField($name, $label, 'boolean');
+		$this->addField($name, $label, 'toggle');
 
 		return $this;
 	}
@@ -263,7 +273,7 @@ class Field
 	{ ?>
 		<label class="scafall-field">
 			<span class="scafall-label"><?= $field['label']; ?></span>
-			<input type="range" name="<?= $field['name']; ?>" value="<?= $this->getValue($field); ?>">
+			<input type="range" name="<?= $field['name']; ?>" value="<?= $this->getValue($field); ?>" min="<?= $field['attributes']['min'] ?? 0; ?>" max="<?= $field['attributes']['max'] ?? 100; ?>" step="<?= $field['attributes']['step'] ?? 1; ?>">
 		</label>
 	<?php }
 
@@ -366,9 +376,9 @@ class Field
 	<?php }
 
 	/**
-	 * Generates a single checkbox.
+	 * Generates a single checkbox i.e. toggle.
 	 */
-	public function showBoolean(array $field): void
+	public function showToggle(array $field): void
 	{
 		$option = $this->getValue($field); ?>
 
@@ -455,7 +465,7 @@ class Field
 	{
 		switch ($field['type']) {
 			case 'number':
-			case 'boolean':
+			case 'toggle':
 				$value = (int) $value;
 				break;
 			case 'email':
