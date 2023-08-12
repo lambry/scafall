@@ -65,7 +65,7 @@ class Field
 	}
 
 	/**
-	 * Add a email field to fields.
+	 * Add an email field to fields.
 	 */
 	public function email(string $name, string $label): self
 	{
@@ -256,7 +256,7 @@ class Field
 	<?php }
 
 	/**
-	 * Create an number field.
+	 * Create a number field.
 	 */
 	public function showNumber(array $field): void
 	{ ?>
@@ -267,7 +267,7 @@ class Field
 	<?php }
 
 	/**
-	 * Create an range field.
+	 * Create a range field.
 	 */
 	public function showRange(array $field): void
 	{ ?>
@@ -289,7 +289,7 @@ class Field
 	<?php }
 
 	/**
-	 * Create an password field.
+	 * Create a password field.
 	 */
 	public function showPassword(array $field): void
 	{ ?>
@@ -433,14 +433,14 @@ class Field
 	<?php }
 
 	/**
-	 * Generates a info section.
+	 * Generates an info section.
 	 */
 	public function showInfo(array $field): void
 	{ ?>
 		<p class="scafall-field scafall-info">
 			<?= $field['label']; ?>
 		</p>
-<?php }
+    <?php }
 
 	/**
 	 * Gets an options value.

@@ -25,7 +25,7 @@ Post::add('book', 'Book', 'Books')->options(['menu_icon' => 'dashicons-book']);
 use Lambry\Scafall\Taxonomy;
 
 // Adding a taxonomy
-Taxonomy::add('genre', 'Genre', 'Genres')->to('book');
+Taxonomy::add('group', 'Group', 'Group')->to('team');
 
 // Overriding the default options
 Taxonomy::add('genre', 'Genre', 'Genres')->options(['hierarchical' => true])->to('book');
@@ -37,7 +37,7 @@ Taxonomy::add('genre', 'Genre', 'Genres')->options(['hierarchical' => true])->to
 use Lambry\Scafall\Role;
 
 // Adding a role
-Role::add('proofreader', 'Proofreader');
+Role::add('manager', 'Manager');
 
 // Overriding the default capabilities
 Role::add('proofreader', 'Proofreader')->capabilities(['edit_posts' => true]);
@@ -49,30 +49,28 @@ Role::add('proofreader', 'Proofreader')->capabilities(['edit_posts' => true]);
 use Lambry\Scafall\Option;
 
 // Adding a new options page
-Option::add('Options', 'Main Options')
-	->section('display', 'Display', function($field) {
-		$field->text('notice_title', 'Notice title');
-		$field->upload('notice_image', 'Notice image');
+Option::add('contact', 'Contact', 'Contact Options')->fields(function($field) {
+    $field->text('contact_name', 'Contact name');
+    $field->email('contact_email', 'Contact email');
+    $field->upload('contact_image', 'Contact image');
+    $field->toggle('display_contact', 'Show contact details');
+});
+
+// An options page with tabbed sections
+Option::add('options', 'Options', 'Main Options')
+	->section('notice', 'Notice', function($field) {
 		$field->number('notice_delay', 'Notice delay');
 		$field->date('notice_date', 'Show notice until');
 		$field->colour('notice_colour', 'Notice colour');
 		$field->textarea('notice_content', 'Notice content');
 	})
-	->section('Extras', 'Extras', function($field) {
+	->section('extras', 'Extras', function($field) {
 		$field->url('api_url', 'API URL');
 		$field->password('api_key', 'API Key');
-		$field->email('contact_email', 'Contact email');
-		$field->toggle('maintenance_mode', 'Unable maintenance mode');
-		$field->range('api_cache', 'Cache duration')->attributes([
-			'min' => 30,
-			'max' => 120
-		]);
-		$field->radio('map_type', 'Default map type')->options([
-			'map' => 'Map',
-			'sat' => 'Satellite'
-		]);
+		$field->range('api_cache', 'Cache duration')->attributes(['min' => 30, 'max' => 120]);
+		$field->radio('map_type', 'Map type')->options(['map' => 'Map', 'sat' => 'Satellite']);
 	})
-	->to('menu');
+	->to('options');
 ```
 
 ## Meta Boxes
@@ -84,18 +82,12 @@ use Lambry\Scafall\Meta;
 Meta::add('author', 'Author Details')->fields(function($field) {
 	$field->info('author_info', 'Information all about the author');
 	$field->toggle('author_active', 'Display author details');
-	$field->colour('author_colour', 'Background colour');
-	$field->email('author_email', 'Email address');
-	$field->date('author_dob', 'Date of birth');
 	$field->editor('author_bio', 'Bio');
-	$field->select('author_publisher', 'Publisher')->options([
-		'penguin' => 'Penguin',
-		'harpercollins' => 'HarperCollins'
-	]);
-	$field->checkbox('author_awards', 'Awards')->options([
-		'pulitzer' => 'Pulitzer',
-		'bestseller' => 'Bestseller'
-	]);
+	$field->date('author_dob', 'Date of birth');
+	$field->email('author_email', 'Email address');
+	$field->colour('author_colour', 'Background colour');
+	$field->select('author_publisher', 'Publisher')->options(['penguin' => 'Penguin', 'harper' => 'Harper']);
+	$field->checkbox('author_awards', 'Awards')->options(['pulitzer' => 'Pulitzer', 'nebula' => 'Nebula']);
 })
 ->to('book');
 ```
@@ -123,10 +115,10 @@ Rest::prefix('theme/v1')->group(function($rest) {
 	$rest->get('/books', [BookController::class, 'index']);
 
 	// Checking the authed users capabilities
-	$rest->patch('/books/{slug}', BookController::class)->can('edit_book');
+	$rest->post('/books', BookController::class)->can('create_books');
 
 	// Checking the authed users role
-	$rest->delete('/books/{slug}', BookController::class)->role('editor');
+	$rest->patch('/books/{slug}', BookController::class)->role('editor');
 
 	// Custom authentication via the auth method
 	$rest->delete('/books/{slug}', BookController::class)->auth($callback);
@@ -136,40 +128,49 @@ Rest::prefix('theme/v1')->group(function($rest) {
 });
 ```
 
+When using a controller, the default method called will match the HTTP request method.
+For example `$rest->get('/books', BookController::class)` would call a `get` method on the `BookController` class.
+
 ## Routes
 
 ```php
 use Lambry\Scafall\Route;
 
-// Adding a new group of routes
-Route::prefix('team')->group(function($route) {
-	// Adding routes
-	$route->get('/dashboard', fn() => get_template_directory() . '/team/dashboard.php');
+// Adding stand-alone routes
+Route::get('/dashboard', fn() => get_template_directory() . '/dashboard.php');
 
-	// Using a controller to manage routes
+// Using a controller to manage routes
+Route::get('/members', MembersController::class);
+Route::post('/members', MembersController::class);
+Route::put('/members/{id}', MembersController::class);
+Route::patch('/members/{id}', MembersController::class);
+Route::delete('/members/{id}', MembersController::class);
+
+// Overriding the default callback method
+Route::get('/members', [MembersController::class, 'index']);
+
+// Checking the authed users capabilities
+Route::post('/members/{id}', MembersController::class)->can('create_members');
+
+// Checking the authed users role
+Route::patch('/members/{id}', MembersController::class)->role('manager');
+
+// Custom authentication via the auth method
+Route::delete('/members/{id}', MembersController::class)->auth($callback);
+
+// Nested routes
+Route::get('/members/{id}/posts/{slug}', $callback);
+
+// Adding a group of prefixed routes
+Route::prefix('team')->group(function($route) {
 	$route->get('/members', MembersController::class);
 	$route->post('/members', MembersController::class);
 	$route->put('/members/{id}', MembersController::class);
 	$route->patch('/members/{id}', MembersController::class);
 	$route->delete('/members/{id}', MembersController::class);
-
-	// Overriding the default callback method
-	$route->get('/members', [MembersController::class, 'index']);
-
-	// Checking the authed users capabilities
-	$route->patch('/members/{id}', MembersController::class)->can('edit_member');
-
-	// Checking the authed users role
-	$route->delete('/members/{id}', MembersController::class)->role('manager');
-
-	// Custom authentication via the auth method
-	$route->delete('/members/{id}', MembersController::class)->auth($callback);
-
-	// Nested routes
-	$rest->get('/members/{id}/posts/{slug}', $callback);
 });
 ```
 
-To use the put, patch and delete methods with frontend routes you'll need to add a hidden field named `_method` with a value of `PUT`, `PATCH` or `DELETE`.
+To use the `put`, `patch` and `delete` methods on frontend routes, you'll need to add a hidden field named `_method` with a value of `PUT`, `PATCH` or `DELETE`.
 
 Notes: requires PHP 8.0+

@@ -24,6 +24,7 @@ class Route extends Router
 		add_action('init', [$this, 'rules']);
 		add_filter('query_vars', [$this, 'variables']);
 		add_filter('template_include', [$this, 'template']);
+		add_filter('document_title_parts', [$this, 'document']);
 
 		return $this;
 	}
@@ -40,7 +41,11 @@ class Route extends Router
 
 			$uri = $this->formatUri($route->uri);
 
-			add_rewrite_rule("{$route->prefix}{$uri}[/]?$", 'index.php?pagename=' . $name . $this->formatParams($route->uri), 'top');
+            if ($route->prefix) {
+                $uri = "{$route->prefix}/{$uri}";
+            }
+
+			add_rewrite_rule("{$uri}[/]?$", 'index.php?pagename=' . $name . $this->formatParams($route->uri), 'top');
 
 			$this->registered[] = $name;
 		}
@@ -67,12 +72,30 @@ class Route extends Router
 
 		if ($route && $this->checkPermissions($route)) {
 			$template = $this->runCallback($route);
+
+            if ($template) {
+                status_header(200);
+            }
 		}
 
 		return $template;
 	}
 
-	/**
+    /**
+     * Handle the setting the document title.
+     */
+    public function document(array $title): array
+    {
+        $route = $this->matchRoute();
+
+        if ($route && $this->checkPermissions($route)) {
+            $title['title'] = $route->title ?? ucwords(str_replace('/', ' ', $_SERVER['REQUEST_URI']));
+        }
+
+        return $title;
+    }
+
+    /**
 	 * Helper to get/generate the routes name.
 	 */
 	private function getName(object $route): string
@@ -95,6 +118,8 @@ class Route extends Router
 	 */
 	public function formatUri(string $uri): string
 	{
+		$uri = ltrim($uri, '/');
+
 		return str_replace(['{', '}'], '', preg_replace('/(?<={)(.*?)(?=})/', '([a-z0-9-]+)', $uri));
 	}
 
@@ -118,7 +143,7 @@ class Route extends Router
 	private function matchRoute(): ?object
 	{
 		$page = get_query_var('pagename');
-		$type = $_POST ? $_POST['_method'] ?? 'POST' : 'GET';
+		$type = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
 		return array_values(array_filter($this->routes, function ($route) use ($page, $type) {
 			return $this->getName($route) === $page && $route->type === $type;

@@ -21,6 +21,29 @@ class Router
 	{ }
 
 	/**
+	 * Handle calls to magic methods.
+	 */
+	public function __call(string $name, array $arguments): self
+	{
+		$method = "_{$name}";
+
+		$this->{$method}(...$arguments);
+
+		return $this;
+	}
+	/**
+	 * Handle calls to magic static methods.
+	 */
+	public static function __callStatic(string $name, array $arguments): self
+	{
+		$class = new static();
+
+		$class->{$name}(...$arguments);
+
+		return $class;
+	}
+
+	/**
 	 * Setup prefix.
 	 */
 	public static function prefix(string $prefix): static
@@ -45,7 +68,7 @@ class Router
 	/**
 	 * Register get route/endpoint.
 	 */
-	public function get(string $uri, mixed $handle): self
+	public function _get(string $uri, mixed $handle): self
 	{
 		$this->addRoute($uri, $handle, 'GET');
 
@@ -55,7 +78,7 @@ class Router
 	/**
 	 * Register post route/endpoint.
 	 */
-	public function post(string $uri, mixed $handle): self
+	public function _post(string $uri, mixed $handle): self
 	{
 		$this->addRoute($uri, $handle, 'POST');
 
@@ -65,7 +88,7 @@ class Router
 	/**
 	 * Register put route/endpoint.
 	 */
-	public function put(string $uri, mixed $handle): self
+	public function _put(string $uri, mixed $handle): self
 	{
 		$this->addRoute($uri, $handle, 'PUT');
 
@@ -75,7 +98,7 @@ class Router
 	/**
 	 * Register patch route/endpoint.
 	 */
-	public function patch(string $uri, mixed $handle): self
+	public function _patch(string $uri, mixed $handle): self
 	{
 		$this->addRoute($uri, $handle, 'PATCH');
 
@@ -85,7 +108,7 @@ class Router
 	/**
 	 * Register delete route/endpoint.
 	 */
-	public function delete(string $uri, mixed $handle): self
+	public function _delete(string $uri, mixed $handle): self
 	{
 		$this->addRoute($uri, $handle, 'DELETE');
 
@@ -103,7 +126,7 @@ class Router
 	}
 
 	/**
-	 * Check the users role.
+	 * Check the user's role.
 	 */
 	public function role(string $role): self
 	{

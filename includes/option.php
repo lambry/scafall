@@ -22,7 +22,7 @@ class Option extends Field
 	/**
 	 * Setup and add actions.
 	 */
-	public function __construct(private string $menu, private string $title, private array $options)
+	public function __construct(private string $id, private string $menu, private string $title, private array $options)
 	{
 		$this->slug = sanitize_title_with_dashes($menu);
 		$this->options = wp_parse_args($options, $this->menuOptions());
@@ -37,12 +37,20 @@ class Option extends Field
 	/**
 	 * Set up new option instance.
 	 */
-	public static function add(string $menu, string $title, $options = []): Option
+	public static function add(string $id, string $menu, string $title, $options = []): Option
 	{
-		return new Option($menu, $title, $options);
+		return new Option($id, $menu, $title, $options);
 	}
 
-	/**
+    /**
+     * Set up fields.
+     */
+    public function fields(Closure $callback): self
+    {
+        return $this->section("{$this->id}_section", '', $callback);
+    }
+
+    /**
 	 * Set up a new section and fields.
 	 */
 	public function section(string $id, string $title, Closure $callback): self
@@ -50,6 +58,7 @@ class Option extends Field
 		$callback($this);
 
 		$fields = $this->fields;
+        $id = "{$this->id}_{$id}";
 
 		$this->sections[] = (object) compact('id', 'title', 'fields');
 
@@ -136,18 +145,22 @@ class Option extends Field
 	public function page(): void
 	{ ?>
 		<div id="<?= $this->slug; ?>" class="wrap scafall scafall-option">
-			<h2><?= $this->title; ?></h2>
+            <?php if ($this->title) : ?>
+			    <h2><?= $this->title; ?></h2>
+            <?php endif; ?>
 			<?php settings_errors(); ?>
 
-			<h2 class="nav-tab-wrapper">
-				<?php foreach ($this->sections as $section) : ?>
-					<a href="?page=<?= $this->slug; ?>&amp;tab=<?= $section->id; ?>" class="nav-tab <?= ($section->id === $this->activeTab()) ? 'nav-tab-active' : ''; ?>">
-						<?= $section->title; ?>
-					</a>
-				<?php endforeach; ?>
-			</h2>
+            <?php if (count($this->sections) > 1) : ?>
+                <h2 class="nav-tab-wrapper">
+                    <?php foreach ($this->sections as $section) : ?>
+                        <a href="?page=<?= $this->slug; ?>&amp;tab=<?= $section->id; ?>" class="nav-tab <?= ($section->id === $this->activeTab()) ? 'nav-tab-active' : ''; ?>">
+                            <?= $section->title; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </h2>
+            <?php endif; ?>
 
-			<form action="options.php" method="POST" enctype="post">
+			<form action="options.php" method="POST">
 				<?php
 					foreach ($this->sections as $section) {
 						if ($section->id === $this->activeTab()) {
